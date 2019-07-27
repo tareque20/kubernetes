@@ -122,3 +122,60 @@ kubectl run hazelcast --image=hazelcast/hazelcast --port=5701
 kubectl describe pod
 ```
 
+### Scaling Commands
+```sh
+kubectl scale --replicas=4 deployment/tomcat-deployment 
+ 
+kubectl expose deployment tomcat-deployment --type=NodePort
+// scale
+kubectl expose deployment tomcat-deployment --type=LoadBalancer --port=8080 --target-port=8080 --name tomcat-load-balancer
+ 
+kubectl describe services tomcat-load-balancer
+```
+
+### Deployments Commands
+```sh
+// get deployment list
+kubectl get deployments
+
+//rollout status
+kubectl rollout status deployment tomcat-deployment
+
+// update image in deployment
+kubectl set image deployment/tomcat-deployment tomcat=tomcat:9.0.1
+
+// check rollout history
+kubectl rollout history deployment/tomcat-deployment
+
+// check rollout history of a revision
+kubectl rollout history deployment/tomcat-deployment --revision=1
+```
+
+### Label and seletor
+Label can apply on `Deployment`, `Services` and `Nodes`.
+
+```sh
+kubectl get nodes
+
+// added label storageType
+kubectl label node minikube storageType=ssd
+
+//check node
+kubectl describe node minikube
+
+// apply again
+kubectl apply -f ./deployment.yaml
+```
+
+### Web Interface/ Dashboard
+
+```sh
+kubectl proxy
+or
+minikube dashboard
+or 
+http://localhost:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy
+
+kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+```
+
